@@ -24,7 +24,7 @@ import net.minecraftforge.gradle.user.UserBaseExtension;
 
 public class TweakerExtension extends UserBaseExtension {
     private Object tweakClass;
-    private Object mainClass = "net.minecraft.launchwrapper.Launch";
+    private Object mainClass = "org.bookmc.loader.impl.launch.Quilt";
     private boolean launchwrapper = true;
 
     public TweakerExtension(TweakerPlugin plugin) {
