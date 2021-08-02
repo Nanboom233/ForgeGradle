@@ -22,7 +22,6 @@ package net.minecraftforge.gradle.user.tweakers;
 import com.google.common.base.Strings;
 import net.minecraftforge.gradle.common.Constants;
 import net.minecraftforge.gradle.user.UserVanillaBasePlugin;
-import net.minecraftforge.gradle.util.GradleConfigurationException;
 import org.gradle.api.tasks.bundling.Jar;
 
 import java.util.List;
@@ -31,7 +30,10 @@ public abstract class TweakerPlugin extends UserVanillaBasePlugin<TweakerExtensi
     @Override
     protected void applyVanillaUserPlugin() {
         // add launchwrapper dep.. cuz everyone uses it apperantly..
-        project.getDependencies().add(Constants.CONFIG_MC_DEPS, "net.minecraft:launchwrapper:1.11");
+        TweakerExtension extension = getExtension();
+        if (extension.isLaunchwrapper()) {
+            project.getDependencies().add(Constants.CONFIG_MC_DEPS, "net.minecraft:launchwrapper:1.12");
+        }
     }
 
     @Override
@@ -40,13 +42,12 @@ public abstract class TweakerPlugin extends UserVanillaBasePlugin<TweakerExtensi
 
         TweakerExtension ext = getExtension();
 
-        if (Strings.isNullOrEmpty(ext.getTweakClass())) {
-            throw new GradleConfigurationException("You must set the tweak class of your tweaker!");
-        }
 
-        // add fml tweaker to manifest
-        Jar jarTask = (Jar) project.getTasks().getByName("jar");
-        jarTask.getManifest().getAttributes().put("TweakClass", ext.getTweakClass());
+        if (!Strings.isNullOrEmpty(ext.getTweakClass())) {
+            // add fml tweaker to manifest
+            Jar jarTask = (Jar) project.getTasks().getByName("jar");
+            jarTask.getManifest().getAttributes().put("TweakClass", ext.getTweakClass());
+        }
     }
 
     @Override
@@ -67,8 +68,10 @@ public abstract class TweakerPlugin extends UserVanillaBasePlugin<TweakerExtensi
     @Override
     protected List<String> getClientRunArgs(TweakerExtension ext) {
         List<String> out = super.getClientRunArgs(ext);
-        out.add("--tweakClass");
-        out.add(ext.getTweakClass());
+        if (!Strings.isNullOrEmpty(ext.getTweakClass())) {
+            out.add("--tweakClass");
+            out.add(ext.getTweakClass());
+        }
         return out;
     }
 
@@ -80,8 +83,10 @@ public abstract class TweakerPlugin extends UserVanillaBasePlugin<TweakerExtensi
     @Override
     protected List<String> getServerRunArgs(TweakerExtension ext) {
         List<String> out = super.getServerRunArgs(ext);
-        out.add("--tweakClass");
-        out.add(ext.getTweakClass());
+        if (!Strings.isNullOrEmpty(ext.getTweakClass())) {
+            out.add("--tweakClass");
+            out.add(ext.getTweakClass());
+        }
         return out;
     }
 
