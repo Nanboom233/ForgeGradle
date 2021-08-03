@@ -26,6 +26,9 @@ import org.gradle.api.tasks.bundling.Jar;
 
 import java.util.List;
 
+import static net.minecraftforge.gradle.common.Constants.REPLACE_CACHE_DIR;
+import static net.minecraftforge.gradle.common.Constants.REPLACE_MC_VERSION;
+
 public abstract class TweakerPlugin extends UserVanillaBasePlugin<TweakerExtension> {
     @Override
     protected void applyVanillaUserPlugin() {
@@ -98,5 +101,10 @@ public abstract class TweakerPlugin extends UserVanillaBasePlugin<TweakerExtensi
     @Override
     protected List<String> getServerJvmArgs(TweakerExtension ext) {
         return ext.getResolvedServerJvmArgs();
+    }
+
+    @Override
+    protected Object getStartDir() {
+        return delayedFile(REPLACE_CACHE_DIR + "/net/minecraft/" + getJarName() + "/" + REPLACE_MC_VERSION + "/bookmc-start");
     }
 }
