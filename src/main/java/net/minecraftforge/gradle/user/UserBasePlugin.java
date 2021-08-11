@@ -964,10 +964,14 @@ public abstract class UserBasePlugin<T extends UserBaseExtension> extends BasePl
                 return;
 
             T ext = getExtension();
+            List<String> jvmArgs = new ArrayList<>();
+            jvmArgs.add("-Djava.library.path=" + delayedFile(DIR_NATIVES).call().getAbsolutePath());
+            jvmArgs.addAll(getClientJvmArgs(ext));
+
             if (hasClientRun()) {
                 GenEclipseRunTask task = ((GenEclipseRunTask) project.getTasks().getByName("makeEclipseCleanRunClient"));
                 task.setArguments(Joiner.on(' ').join(getClientRunArgs(ext)));
-                task.setJvmArguments(Joiner.on(' ').join(getClientJvmArgs(ext)));
+                task.setJvmArguments(Joiner.on(' ').join(jvmArgs));
             }
             if (hasServerRun()) {
                 GenEclipseRunTask task = ((GenEclipseRunTask) project.getTasks().getByName("makeEclipseCleanRunServer"));
@@ -1055,7 +1059,7 @@ public abstract class UserBasePlugin<T extends UserBaseExtension> extends BasePl
             }
         });
         task.setGroup(GROUP_FG);
-        task.setDescription("Generates the ForgeGradle run configurations for intellij Idea");
+        task.setDescription("Generates the ForgeGradle run configurations for IntelliJ IDEA");
 
         if (ideaConv.getWorkspace().getIws() == null)
             return;
@@ -1096,6 +1100,9 @@ public abstract class UserBasePlugin<T extends UserBaseExtension> extends BasePl
         }
 
         T ext = getExtension();
+        List<String> jvmArgs = new ArrayList<>();
+        jvmArgs.add("-Djava.library.path=" + delayedFile(DIR_NATIVES).call().getAbsolutePath());
+        jvmArgs.addAll(getClientJvmArgs(ext));
 
         String[][] config = new String[][]
                 {
@@ -1104,7 +1111,7 @@ public abstract class UserBasePlugin<T extends UserBaseExtension> extends BasePl
                                         "Minecraft Client",
                                         GRADLE_START_CLIENT,
                                         Joiner.on(' ').join(getClientRunArgs(ext)),
-                                        Joiner.on(' ').join(getClientJvmArgs(ext))
+                                        Joiner.on(' ').join(jvmArgs)
                                 } : null,
 
                         this.hasServerRun() ? new String[]
