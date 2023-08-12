@@ -49,7 +49,7 @@ public abstract class BaseExtension {
     // custom version for custom mappings
     protected String mappingsCustom = null;
 
-    protected boolean gitVersion = true;
+//    protected boolean gitVersion = true;
 
     public BaseExtension(BasePlugin<? extends BaseExtension> plugin) {
         this.project = plugin.project;
@@ -97,23 +97,23 @@ public abstract class BaseExtension {
         checkMappings();
     }
 
-    /**
-     * Enables/Disables the option to use GitVersion in the "ProjectVersion.java" class
-     *
-     * @param gitVersion boolean
-     */
-    public void setGitVersion(boolean gitVersion) {
-        this.gitVersion = gitVersion;
-    }
-
-    /**
-     * Returns the value of if gitVersion is enabled or disabled
-     *
-     * @return Whether gitVersion is enabled/disabled.
-     */
-    public boolean isGitVersion() {
-        return gitVersion;
-    }
+//    /**
+//     * Enables/Disables the option to use GitVersion in the "ProjectVersion.java" class
+//     *
+//     * @param gitVersion boolean
+//     */
+//    public void setGitVersion(boolean gitVersion) {
+//        this.gitVersion = gitVersion;
+//    }
+//
+//    /**
+//     * Returns the value of if gitVersion is enabled or disabled
+//     *
+//     * @return Whether gitVersion is enabled/disabled.
+//     */
+//    public boolean isGitVersion() {
+//        return gitVersion;
+//    }
 
     /**
      * Get the MCP data version
